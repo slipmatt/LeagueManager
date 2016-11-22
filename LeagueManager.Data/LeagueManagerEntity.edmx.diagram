@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="edd217cd4dc64d3eb12c2ff996238f63" Name="Diagram1">
+        <EntityTypeShape EntityType="LeagueManagerModel.Event" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LeagueManagerModel.EventTeam" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LeagueManagerModel.Lookup_Outcome" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LeagueManagerModel.Player" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="LeagueManagerModel.sysdiagram" Width="1.5" PointX="5.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="LeagueManagerModel.Team" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <AssociationConnector Association="LeagueManagerModel.FK_EventTeam_Event" ManuallyRouted="false" />
+        <AssociationConnector Association="LeagueManagerModel.FK_EventTeam_Lookup_Outcome" ManuallyRouted="false" />
+        <AssociationConnector Association="LeagueManagerModel.FK_EventTeam_Team" ManuallyRouted="false" />
+        <AssociationConnector Association="LeagueManagerModel.FK_Player_Team" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
