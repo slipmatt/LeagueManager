@@ -15,6 +15,12 @@
         <AssociationConnector Association="LeagueManagerModel.FK_EventTeam_Lookup_Outcome" ManuallyRouted="false" />
         <AssociationConnector Association="LeagueManagerModel.FK_EventTeam_Team" ManuallyRouted="false" />
         <AssociationConnector Association="LeagueManagerModel.FK_Player_Team" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="LeagueManagerModel.Fixture" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="LeagueManagerModel.Lookup_Stages" Width="1.5" PointX="0.75" PointY="11.75" />
+        <AssociationConnector Association="LeagueManagerModel.FK_Fixture_Event" />
+        <AssociationConnector Association="LeagueManagerModel.FK_EventTeam_Lookup_Stages" />
+        <AssociationConnector Association="LeagueManagerModel.FK_Fixture_Team" />
+        <AssociationConnector Association="LeagueManagerModel.FK_Fixture_Team1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -19,6 +19,8 @@ namespace LeagueManager.Data
         {
             this.EventTeams = new HashSet<EventTeam>();
             this.Players = new HashSet<Player>();
+            this.Fixtures = new HashSet<Fixture>();
+            this.Fixtures1 = new HashSet<Fixture>();
         }
     
         public int TeamId { get; set; }
@@ -28,5 +30,9 @@ namespace LeagueManager.Data
         public virtual ICollection<EventTeam> EventTeams { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Player> Players { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Fixture> Fixtures { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Fixture> Fixtures1 { get; set; }
     }
 }

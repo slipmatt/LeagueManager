@@ -12,16 +12,15 @@ namespace LeagueManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class EventTeam
+    public partial class Fixture
     {
+        public int FixtureId { get; set; }
         public int EventId { get; set; }
-        public int TeamId { get; set; }
-        public int OutcomeId { get; set; }
-        public int StageId { get; set; }
+        public int HomeTeam { get; set; }
+        public int AwayTeam { get; set; }
     
         public virtual Event Event { get; set; }
-        public virtual Lookup_Outcome Lookup_Outcome { get; set; }
         public virtual Team Team { get; set; }
-        public virtual Lookup_Stages Lookup_Stages { get; set; }
+        public virtual Team Team1 { get; set; }
     }
 }

@@ -34,6 +34,14 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Moq, Version=4.5.10.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.5.10\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
@@ -59,6 +67,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,13 +77,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventsTests.cs" />
+    <Compile Include="TeamTests.cs" />
+    <Compile Include="Mock\Database\BaseMock.cs" />
+    <Compile Include="Mock\Database\MockData\TeamsMockData.cs" />
+    <Compile Include="Mock\Database\MockHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LeagueManager.Data\LeagueManager.Data.csproj">
+      <Project>{d36511da-d4b6-418c-b26e-789c18456510}</Project>
+      <Name>LeagueManager.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LeagueManager\LeagueManager.Manager.csproj">
+      <Project>{81308c29-0e36-4985-bf7c-0223e5b5de5c}</Project>
+      <Name>LeagueManager.Manager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UnitOfWork\UnitOfWork.csproj">
       <Project>{D5E3F1B9-033F-44EA-BE16-D33C18A2B469}</Project>
       <Name>UnitOfWork</Name>

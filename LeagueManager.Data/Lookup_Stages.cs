@@ -12,16 +12,19 @@ namespace LeagueManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class EventTeam
+    public partial class Lookup_Stages
     {
-        public int EventId { get; set; }
-        public int TeamId { get; set; }
-        public int OutcomeId { get; set; }
-        public int StageId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Lookup_Stages()
+        {
+            this.EventTeams = new HashSet<EventTeam>();
+        }
     
-        public virtual Event Event { get; set; }
-        public virtual Lookup_Outcome Lookup_Outcome { get; set; }
-        public virtual Team Team { get; set; }
-        public virtual Lookup_Stages Lookup_Stages { get; set; }
+        public int StageId { get; set; }
+        public string StageName { get; set; }
+        public bool IsKnockout { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EventTeam> EventTeams { get; set; }
     }
 }

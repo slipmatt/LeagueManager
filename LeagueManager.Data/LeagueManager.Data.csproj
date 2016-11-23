@@ -57,6 +57,9 @@
     <Compile Include="EventTeam.cs">
       <DependentUpon>LeagueManagerEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Fixture.cs">
+      <DependentUpon>LeagueManagerEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="LeagueManagerEntity.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -73,6 +76,9 @@
       <DependentUpon>LeagueManagerEntity.edmx</DependentUpon>
     </Compile>
     <Compile Include="Lookup_Outcome.cs">
+      <DependentUpon>LeagueManagerEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Lookup_Stages.cs">
       <DependentUpon>LeagueManagerEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Player.cs">

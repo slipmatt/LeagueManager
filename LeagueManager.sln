@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueManager.Manager", "LeagueManager\LeagueManager.Manager.csproj", "{81308C29-0E36-4985-BF7C-0223E5B5DE5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leaguemanager.Tests", "Leaguemanager.Tests\Leaguemanager.Tests.csproj", "{26AE5E9E-ABBF-4D8C-8E6F-F6F34F82EA99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueManager.Tests", "Leaguemanager.Tests\LeagueManager.Tests.csproj", "{26AE5E9E-ABBF-4D8C-8E6F-F6F34F82EA99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitOfWork", "UnitOfWork\UnitOfWork.csproj", "{D5E3F1B9-033F-44EA-BE16-D33C18A2B469}"
 EndProject

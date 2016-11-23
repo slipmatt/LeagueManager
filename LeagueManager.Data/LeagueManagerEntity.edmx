@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LeagueManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LeagueManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="EventId" />
@@ -19,17 +19,36 @@
             <PropertyRef Name="EventId" />
             <PropertyRef Name="TeamId" />
             <PropertyRef Name="OutcomeId" />
+            <PropertyRef Name="StageId" />
           </Key>
           <Property Name="EventId" Type="int" Nullable="false" />
           <Property Name="TeamId" Type="int" Nullable="false" />
           <Property Name="OutcomeId" Type="int" Nullable="false" />
+          <Property Name="StageId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Fixture">
+          <Key>
+            <PropertyRef Name="FixtureId" />
+          </Key>
+          <Property Name="FixtureId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="HomeTeam" Type="int" Nullable="false" />
+          <Property Name="AwayTeam" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Lookup_Outcome">
           <Key>
             <PropertyRef Name="OutcomeId" />
           </Key>
-          <Property Name="OutcomeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OutcomeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="OutcomeText" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lookup_Stages">
+          <Key>
+            <PropertyRef Name="StageId" />
+          </Key>
+          <Property Name="StageId" Type="int" Nullable="false" />
+          <Property Name="StageName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsKnockout" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Player">
           <Key>
@@ -80,6 +99,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_EventTeam_Lookup_Stages">
+          <End Role="Lookup_Stages" Type="Self.Lookup_Stages" Multiplicity="1" />
+          <End Role="EventTeam" Type="Self.EventTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lookup_Stages">
+              <PropertyRef Name="StageId" />
+            </Principal>
+            <Dependent Role="EventTeam">
+              <PropertyRef Name="StageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_EventTeam_Team">
           <End Role="Team" Type="Self.Team" Multiplicity="1" />
           <End Role="EventTeam" Type="Self.EventTeam" Multiplicity="*" />
@@ -89,6 +120,42 @@
             </Principal>
             <Dependent Role="EventTeam">
               <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Fixture_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="Fixture" Type="Self.Fixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="Fixture">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Fixture_Team">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Fixture" Type="Self.Fixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Fixture">
+              <PropertyRef Name="HomeTeam" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Fixture_Team1">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Fixture" Type="Self.Fixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Fixture">
+              <PropertyRef Name="AwayTeam" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -107,7 +174,9 @@
         <EntityContainer Name="LeagueManagerModelStoreContainer">
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EventTeam" EntityType="Self.EventTeam" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Fixture" EntityType="Self.Fixture" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Lookup_Outcome" EntityType="Self.Lookup_Outcome" Schema="dbo" Table="Lookup.Outcome" store:Type="Tables" />
+          <EntitySet Name="Lookup_Stages" EntityType="Self.Lookup_Stages" Schema="dbo" Table="Lookup.Stages" store:Type="Tables" />
           <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
@@ -119,17 +188,32 @@
             <End Role="Lookup_Outcome" EntitySet="Lookup_Outcome" />
             <End Role="EventTeam" EntitySet="EventTeam" />
           </AssociationSet>
+          <AssociationSet Name="FK_EventTeam_Lookup_Stages" Association="Self.FK_EventTeam_Lookup_Stages">
+            <End Role="Lookup_Stages" EntitySet="Lookup_Stages" />
+            <End Role="EventTeam" EntitySet="EventTeam" />
+          </AssociationSet>
           <AssociationSet Name="FK_EventTeam_Team" Association="Self.FK_EventTeam_Team">
             <End Role="Team" EntitySet="Team" />
             <End Role="EventTeam" EntitySet="EventTeam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Fixture_Event" Association="Self.FK_Fixture_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Fixture" EntitySet="Fixture" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Fixture_Team" Association="Self.FK_Fixture_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Fixture" EntitySet="Fixture" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Fixture_Team1" Association="Self.FK_Fixture_Team1">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Fixture" EntitySet="Fixture" />
           </AssociationSet>
           <AssociationSet Name="FK_Player_Team" Association="Self.FK_Player_Team">
             <End Role="Team" EntitySet="Team" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LeagueManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -142,12 +226,14 @@
           <Property Name="EventDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="EventTime" Type="Time" Nullable="false" Precision="7" />
           <NavigationProperty Name="EventTeams" Relationship="Self.FK_EventTeam_Event" FromRole="Event" ToRole="EventTeam" />
+          <NavigationProperty Name="Fixtures" Relationship="LeagueManagerModel.FK_Fixture_Event" FromRole="Event" ToRole="Fixture" />
         </EntityType>
         <EntityType Name="EventTeam">
           <Key>
             <PropertyRef Name="EventId" />
             <PropertyRef Name="TeamId" />
             <PropertyRef Name="OutcomeId" />
+            <PropertyRef Name="StageId" />
           </Key>
           <Property Name="EventId" Type="Int32" Nullable="false" />
           <Property Name="TeamId" Type="Int32" Nullable="false" />
@@ -155,6 +241,8 @@
           <NavigationProperty Name="Event" Relationship="Self.FK_EventTeam_Event" FromRole="EventTeam" ToRole="Event" />
           <NavigationProperty Name="Lookup_Outcome" Relationship="Self.FK_EventTeam_Lookup_Outcome" FromRole="EventTeam" ToRole="Lookup_Outcome" />
           <NavigationProperty Name="Team" Relationship="Self.FK_EventTeam_Team" FromRole="EventTeam" ToRole="Team" />
+          <Property Name="StageId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Lookup_Stages" Relationship="LeagueManagerModel.FK_EventTeam_Lookup_Stages" FromRole="EventTeam" ToRole="Lookup_Stages" />
         </EntityType>
         <EntityType Name="Lookup_Outcome">
           <Key>
@@ -191,6 +279,8 @@
           <Property Name="TeamName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="EventTeams" Relationship="Self.FK_EventTeam_Team" FromRole="Team" ToRole="EventTeam" />
           <NavigationProperty Name="Players" Relationship="Self.FK_Player_Team" FromRole="Team" ToRole="Player" />
+          <NavigationProperty Name="Fixtures" Relationship="LeagueManagerModel.FK_Fixture_Team" FromRole="Team" ToRole="Fixture" />
+          <NavigationProperty Name="Fixtures1" Relationship="LeagueManagerModel.FK_Fixture_Team1" FromRole="Team" ToRole="Fixture" />
         </EntityType>
         <Association Name="FK_EventTeam_Event">
           <End Role="Event" Type="Self.Event" Multiplicity="1" />
@@ -263,7 +353,94 @@
             <End Role="Team" EntitySet="Teams" />
             <End Role="Player" EntitySet="Players" />
           </AssociationSet>
+          <EntitySet Name="Fixtures" EntityType="LeagueManagerModel.Fixture" />
+          <EntitySet Name="Lookup_Stages" EntityType="LeagueManagerModel.Lookup_Stages" />
+          <AssociationSet Name="FK_Fixture_Event" Association="LeagueManagerModel.FK_Fixture_Event">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="Fixture" EntitySet="Fixtures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventTeam_Lookup_Stages" Association="LeagueManagerModel.FK_EventTeam_Lookup_Stages">
+            <End Role="Lookup_Stages" EntitySet="Lookup_Stages" />
+            <End Role="EventTeam" EntitySet="EventTeams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Fixture_Team" Association="LeagueManagerModel.FK_Fixture_Team">
+            <End Role="Team" EntitySet="Teams" />
+            <End Role="Fixture" EntitySet="Fixtures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Fixture_Team1" Association="LeagueManagerModel.FK_Fixture_Team1">
+            <End Role="Team" EntitySet="Teams" />
+            <End Role="Fixture" EntitySet="Fixtures" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Fixture">
+          <Key>
+            <PropertyRef Name="FixtureId" />
+          </Key>
+          <Property Name="FixtureId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="HomeTeam" Type="Int32" Nullable="false" />
+          <Property Name="AwayTeam" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Event" Relationship="LeagueManagerModel.FK_Fixture_Event" FromRole="Fixture" ToRole="Event" />
+          <NavigationProperty Name="Team" Relationship="LeagueManagerModel.FK_Fixture_Team" FromRole="Fixture" ToRole="Team" />
+          <NavigationProperty Name="Team1" Relationship="LeagueManagerModel.FK_Fixture_Team1" FromRole="Fixture" ToRole="Team" />
+        </EntityType>
+        <EntityType Name="Lookup_Stages">
+          <Key>
+            <PropertyRef Name="StageId" />
+          </Key>
+          <Property Name="StageId" Type="Int32" Nullable="false" />
+          <Property Name="StageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsKnockout" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="EventTeams" Relationship="LeagueManagerModel.FK_EventTeam_Lookup_Stages" FromRole="Lookup_Stages" ToRole="EventTeam" />
+        </EntityType>
+        <Association Name="FK_Fixture_Event">
+          <End Type="LeagueManagerModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="LeagueManagerModel.Fixture" Role="Fixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="Fixture">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventTeam_Lookup_Stages">
+          <End Type="LeagueManagerModel.Lookup_Stages" Role="Lookup_Stages" Multiplicity="1" />
+          <End Type="LeagueManagerModel.EventTeam" Role="EventTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lookup_Stages">
+              <PropertyRef Name="StageId" />
+            </Principal>
+            <Dependent Role="EventTeam">
+              <PropertyRef Name="StageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Fixture_Team">
+          <End Type="LeagueManagerModel.Team" Role="Team" Multiplicity="1" />
+          <End Type="LeagueManagerModel.Fixture" Role="Fixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Fixture">
+              <PropertyRef Name="HomeTeam" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Fixture_Team1">
+          <End Type="LeagueManagerModel.Team" Role="Team" Multiplicity="1" />
+          <End Type="LeagueManagerModel.Fixture" Role="Fixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Fixture">
+              <PropertyRef Name="AwayTeam" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -283,6 +460,7 @@
           <EntitySetMapping Name="EventTeams">
             <EntityTypeMapping TypeName="LeagueManagerModel.EventTeam">
               <MappingFragment StoreEntitySet="EventTeam">
+                <ScalarProperty Name="StageId" ColumnName="StageId" />
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="TeamId" ColumnName="TeamId" />
                 <ScalarProperty Name="OutcomeId" ColumnName="OutcomeId" />
@@ -322,6 +500,25 @@
               <MappingFragment StoreEntitySet="Team">
                 <ScalarProperty Name="TeamId" ColumnName="TeamId" />
                 <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Fixtures">
+            <EntityTypeMapping TypeName="LeagueManagerModel.Fixture">
+              <MappingFragment StoreEntitySet="Fixture">
+                <ScalarProperty Name="AwayTeam" ColumnName="AwayTeam" />
+                <ScalarProperty Name="HomeTeam" ColumnName="HomeTeam" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="FixtureId" ColumnName="FixtureId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lookup_Stages">
+            <EntityTypeMapping TypeName="LeagueManagerModel.Lookup_Stages">
+              <MappingFragment StoreEntitySet="Lookup_Stages">
+                <ScalarProperty Name="IsKnockout" ColumnName="IsKnockout" />
+                <ScalarProperty Name="StageName" ColumnName="StageName" />
+                <ScalarProperty Name="StageId" ColumnName="StageId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Transactions;
 
 namespace UnitOfWork
 {
@@ -111,6 +112,59 @@ namespace UnitOfWork
             else
             {
                 return query;
+            }
+        }
+
+        public IQueryable<T> GetByIQuerable(Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "")
+        {
+            var cmd = DbContext.Database.Connection.CreateCommand();
+            if (cmd.Connection.State != System.Data.ConnectionState.Open)
+                cmd.Connection.Open();
+            cmd.CommandText = "set arithabort on";
+            cmd.ExecuteNonQuery();
+            using (var transaction = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }))
+            {
+                IQueryable<T> query = DbSet;
+
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
+
+                foreach (var includeProperty in includeProperties.Split
+                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+
+                var result = orderBy != null ? orderBy(query) : query;
+
+                transaction.Complete();
+                cmd.Connection.Close();
+                cmd.Dispose();
+                return result;
+            }
+        }
+
+        public IEnumerable<TReturnType> ExecuteStoredProcedure<TReturnType>(string query, params object[] parameters)
+        {
+            var cmd = DbContext.Database.Connection.CreateCommand();
+            if (cmd.Connection.State != System.Data.ConnectionState.Open)
+                cmd.Connection.Open();
+            cmd.CommandText = "set arithabort on";
+            cmd.ExecuteNonQuery();
+            using (var transaction = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }))
+            {
+                var result = DbContext.Database.SqlQuery<TReturnType>(query, parameters).ToList();
+
+                transaction.Complete();
+                cmd.Connection.Close();
+                cmd.Dispose();
+                return result;
             }
         }
 

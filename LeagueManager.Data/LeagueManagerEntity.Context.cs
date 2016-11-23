@@ -31,5 +31,7 @@ namespace LeagueManager.Data
         public virtual DbSet<Player> Players { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
+        public virtual DbSet<Fixture> Fixtures { get; set; }
+        public virtual DbSet<Lookup_Stages> Lookup_Stages { get; set; }
     }
 }

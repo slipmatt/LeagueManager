@@ -28,5 +28,9 @@ namespace UnitOfWork
         IEnumerable<T> GetByQuery(Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = "");
+
+        IQueryable<T> GetByIQuerable(Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "");
     }
 }
